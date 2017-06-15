@@ -3,11 +3,12 @@
 def step(words):
     out = []
     for word in words:
-        if word != 'communist':
+        if word != 'communist': #to be honest, I don't remember why it skips this one
             out.extend(asso[word])
     return out
 
 def check(word):
+    # these words are a closed loop and none of them are the answer.
     banned = ['north','east','south','west','northern','eastern','southern','western','northeast','northwest','southeast','southwest']
     if word in banned:
         return False
