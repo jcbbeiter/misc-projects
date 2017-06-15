@@ -1,0 +1,36 @@
+Jacob Beiter
+Lab 04 - Sudoku Solver
+report.txt
+
+--- User interaction ---
+The user uses the sudoku solver in a pretty simple way. They simply run the solve executable with one command line argument: the filename of the input file to read. The programs solves the sudoku grid and prints the solved grid. If for some reason (like an invalid puzzle) the program can't solve it, it quits early after iterating too many times. (It quits after 10000, and for reference the cc1 puzzle is solved in 6.)
+
+--- Objects ---
+Internally, the program is solved using two types of objects. All of the data is stored in a Cell struct that has two member values: 'int value', which represents the number inside the cell, and 'int poss[10]', a bit array to store 1s and 0s based on the possible values of the cell. While technically only 9 spots are needed, there 10 in the array so that the indices can correspond directly to the possibilities 1-9.
+The Cells are governed by a Board class. The Board has a 2D array of Cells that represents the board, utility functions like read() and print(), and functions that are used to solve the puzzle: solve(), update(Cell**), and isSolved().
+
+--- Encapsulation ---
+In a sudoku puzzle, each cell is in three groups: its row, its column, and its minigrid (3x3 grid). The process of comparing possibilities and elimination is the same for all three of these groups, the only thing that changes is the shape of the group. The program uses the principle of encapsulation: the update(Cell**) function, which updates the possibilities of a group and writes values, doesn't know if it's a row, grid, or minigrid it's working on. The process is the same for each group.
+The solve() function creates three different 2D arrays of Cell pointers: row[][], col[][], and grid[][]. These are populated such that row[2] contains the pointers to all Cells in row 2, col[1] the pointers to cells in column 1, and grid[4] the pointers to all Cells in minigrid 4, etc. These groups of Cell pointers are passed to the update function.
+For example, when solve() calls update(row[0]), update() looks at all the cells in the top row, updates the possibility bit arrays based on the values, then checks for elimination/singletons to fill the values.
+
+--- Solving ---
+This is the main part of what actually solves the puzzle:
+
+//update on each row, col, and minigrid
+for(int i = 0; i < 9; i++)
+{
+    update(row[i]);
+    update(col[i]);
+    update(grid[i]);
+}
+
+This loop is one pass of the board - looks at all of the rows, columns, and minigrids, and fills in what it can. It usually only takes 5 or 6 of these passes to solve a puzzle, and the program will exit after 10000 (~ < 1 sec)
+
+--- Verification ---
+The program was verified using the three puzzles provided: easy.txt, medium.txt, and cc1.txt. I used an outside sudoku solving tool to confirm that they produced the correct solution.
+
+--- Reflection ---
+The core strategy in my solution to this problem was to represent the groups (row, col, minigrid) as Cell* arrays. This was the first thing that I implemented and tested: before solving sudoku I made a program that could iterate through the groups and set each cell to its row, col, or minigrid number. Once I had the group pointer arrays properly set up, I didn't have to do any weird iterating in my solving functions: I just had to iterate through a 1D array from 0 to 9, making the code much simpler and easier to both write and understand.
+The other main concern that I had to be careful of (and that caused most of my bugs when trying to complete this sudoku solver) was making sure that whenever I operated on the board, the cell possibilities were updated to reflect that. Now, when a cell is populated, its possibility array is zeroed out and the possibility arrays of every other cell in the group are updated to remove that value. Without this, I was getting errors (particularly with the singleton algorithm) stemming from solved cells still having some possibilities set to true.
+Implementing the update() function to check cell values, update possibilities, etc. was made much simpler and cleaner by iterating through the cells in a group (1-9) as opposed to iterating through the cells on a 2D board in different ways based on the shape of a group.

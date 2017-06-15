@@ -1,0 +1,18 @@
+Homework 04
+===========
+
+--- Activity 1: blend.py ---
+1. I parsed command line arguments by using the loop structure provided in the startup script, and successively popping each argument from the list. If it was a valid option I changed the option (popping a second value if necessary), and if not I called usage(1).
+2. To use the temporary workspace, I created it using tempfile.mkdtemp() and use os.chdir() to switch into it so that all operations would default to there. I stored the current directory before changing, and just added that to the destination of the output gif in the final command.
+3. I extracted the portrait urls by grepping the HTML from the profiles for any string that was a url ending in "jpeg".
+4. I downloaded the portrait images from the urls by using urllib.urlretrieve(source, target), because it provided easy one-line saving to a file.
+5. To generate the blended composite images I generated a steps list with the proportional steps. The first and last steps are always 0 and 100, respectively, regardless of step size (e.g. if the user entered -s 22, the list would be [0, 22, 44, 66, 88, 100]). Then, I used a for loop that ran the 'composite' command with each step size, and added the filename to a list called blendFiles.
+6. I generated the final animation using the composite command. The command string is built over a few lines - first the prefix is added (convert -loop 0 -delay ), and then the delay. A for loop adds each filename to the command and then, if REVERSE is set to true, another for loop adds them in reverse order. Finally, the target file is added, and the command is run.
+7. I checked for operation failure simply by using try...except blocks to catch any errors around any commands that interacted with the web.
+
+--- Activity 2: reddit.py ---
+1. I parsed command line arguments by first storing them into a list (all but the first, which is the script name). While args[] list has a nonzero length and the firstparameter is a '-' followed by at least one character, the loop reads the first one with args.pop(0) and, depending on its value, sets a flag, reads another argument, or calls the usage function if the flag is not a valid one.
+2. I fetched the JSON data using requests.get. The url is just "http://www.reddit.com/r/$SUBREDDIT/.json". The entries all start with {"kind", so I was able to split the body of text into posts using that as a delimiter. After stripping the empty lines and removing the first entry (just a short header), I had a list in which each entry was the JSON data for one post.
+3. I didn't know that you could use the JSON format of the downloaded text in python, so I used regular expressions to check for FIELD and to read its value. I first used re.findall() to see if the provided field is valid: it checks to see if there is the field surrounded by quotes in the JSON. Then, in the loop for each post I capture the field value using regular expressions as well - it searches for the field surrounded by quotes, and then captures the content of the next entry.
+4. I generated the shortened url using requests.get() on the url 'http://is.gd/create.php'. There was also another argument to requests.get() - a parameter dict: {'format' : 'json','url' : link}. These arguments specify the type and destination of the link.
+    Note: with all of us doing this assignment, there are a ton of shortening requests going to is.gd from the student machines. If there are too many, is.gd will time out the student machine and not accept shortening requests. Usually trying another student machine will fix it, but my script checks to make sure that there are no errors when fetching the shortened url. If there are, it prints an error messaged instead of the shortened url
