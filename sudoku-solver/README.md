@@ -7,5 +7,6 @@ Three example puzzles of varying difficulty are in the /puzzles directory, and t
 
 Running script:
 > make
+
 > ./solve $puzzle
     e.g. > ./solve /puzzles/easy.txt
