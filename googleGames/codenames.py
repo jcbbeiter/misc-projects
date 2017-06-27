@@ -16,14 +16,19 @@ def check(word):
     lastwords = []
     words = step([word])
     found = set()
+    # steps through graph until find a red word
     while set(words).isdisjoint(red):
+	# if no change from last time, return false
         if set(lastwords) == words:
             return False
+	# mark found words
         for w in blue:
             if w in words:
                 found.add(w)
+	# if found all blue words, it's the clue!
         if len(found) == 9:
             return True
+	#otherwise, step further through the graph
         else:
             lastwords = words
             words = step(words)
@@ -46,5 +51,5 @@ for line in lines:
 
 for word in asso.keys():
     if(check(word)):
-        print "The clue is: word"
+        print "The clue is: " + word
         break
