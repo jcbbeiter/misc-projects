@@ -5,10 +5,15 @@ One of the labs for the Data Structures class I took was to implement a sudoku s
 
 Three example puzzles of varying difficulty are in the /puzzles directory, and their corresponding solutions in /solutions.
 
-Running script:
+Building and testing:
 
-```> make```
+``> make``
 
-```> ./solve $puzzle ```
+``> make test``
 
-    e.g. ```> ./solve /puzzles/easy.txt```
+Running a puzzle:
+
+``> ./solve $puzzle ``
+
+e.g.
+``> ./solve /puzzles/easy.txt``
