@@ -16,4 +16,5 @@ Running a puzzle:
 ``> ./solve $puzzle ``
 
 e.g.
+
 ``> ./solve /puzzles/easy.txt``
