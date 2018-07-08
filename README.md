@@ -13,7 +13,7 @@ One lab assignment had us implement a sudoku solver in C++ -- this is my solutio
 
 [Advent of Code 2017](https://github.com/jcbbeiter/misc-projects/tree/master/advent_of_code_2017)
 -------------
-I participated in the [2017 Advent of Code](http://adventofcode.com/2017). I did the first thirteen out of the twenty-five, because my computer's motherboard died. I may come back and finish them; it's good Python practice.
+I participated in the [2017 Advent of Code](http://adventofcode.com/2017). I had to stop after thirteen of twenty-five because my computer's motherboard died. I may come back and finish them; it's good Python practice.
 
 
 ----------
